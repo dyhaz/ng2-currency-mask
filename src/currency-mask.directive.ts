@@ -22,12 +22,12 @@ export class CurrencyMaskDirective implements AfterViewInit, ControlValueAccesso
     keyValueDiffer: KeyValueDiffer<any, any>;
 
     optionsTemplate = {
-        align: "right",
+        align: "left",
         allowNegative: true,
         allowZero: true,
         decimal: ".",
-        precision: 2,
-        prefix: "$ ",
+        precision: 0,
+        prefix: "",
         suffix: "",
         thousands: ","
     };
@@ -37,7 +37,7 @@ export class CurrencyMaskDirective implements AfterViewInit, ControlValueAccesso
             this.optionsTemplate = currencyMaskConfig;
         }
 
-        this.keyValueDiffer = keyValueDiffers.find({}).create(null);
+        this.keyValueDiffer = keyValueDiffers.find({}).create();
     }
 
     ngAfterViewInit() {
@@ -57,6 +57,7 @@ export class CurrencyMaskDirective implements AfterViewInit, ControlValueAccesso
 
     @HostListener("blur", ["$event"])
     handleBlur(event: any) {
+        this.inputHandler.handleNaNValue();
         this.inputHandler.getOnModelTouched().apply(event);
     }
 
@@ -86,6 +87,11 @@ export class CurrencyMaskDirective implements AfterViewInit, ControlValueAccesso
         if (!this.isChromeAndroid()) {
             this.inputHandler.handleKeypress(event);
         }
+    }
+
+    @HostListener("keyup", ["$event"])
+    handleKeyup(event: any) {
+        this.inputHandler.handleNaNValue();
     }
 
     @HostListener("paste", ["$event"])

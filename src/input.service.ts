@@ -22,11 +22,19 @@ export class InputService {
 
     applyMask(isNumber: boolean, rawValue: string): string {
         let { allowNegative, decimal, precision, prefix, suffix, thousands } = this.options;
-        rawValue = isNumber ? new Number(rawValue).toFixed(precision) : rawValue;
-        let onlyNumbers = rawValue.replace(/[^0-9]/g, "");
+        rawValue = isNumber ? new Number(rawValue).toFixed(/*precision*/ 2) : rawValue;
+        let onlyNumbers = rawValue.replace(/[^0-9.]/g, "");
 
-        if (!onlyNumbers) {
+        let moreThanOneDecimalPoint = (onlyNumbers.indexOf(decimal) != onlyNumbers.lastIndexOf(decimal));
+
+        if (!onlyNumbers || moreThanOneDecimalPoint) {
             return "";
+        }
+
+        if (onlyNumbers.split('.').length > 1) {
+            if (onlyNumbers.split('.')[1].length > 2) {
+                onlyNumbers = onlyNumbers.substring(0, onlyNumbers.length - 1);
+            }
         }
 
         let integerPart = onlyNumbers.slice(0, onlyNumbers.length - precision).replace(/^0*/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, thousands);

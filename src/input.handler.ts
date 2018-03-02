@@ -75,6 +75,8 @@ export class InputHandler {
                 this.inputService.removeNumber(keyCode);
                 this.onModelChange(this.inputService.value);
             }
+
+            this.handleNaNValue();
         }
     }
 
@@ -108,6 +110,13 @@ export class InputHandler {
             this.setValue(this.inputService.value);
             this.onModelChange(this.inputService.value);
         }, 1);
+    }
+
+    handleNaNValue(): void {
+        if (Number.isNaN(this.inputService.value)) {
+            this.setValue(null);
+            this.onModelChange('');
+        }
     }
 
     updateOptions(options: any): void {
