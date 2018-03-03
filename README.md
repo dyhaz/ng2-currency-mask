@@ -1,6 +1,6 @@
-# ng2-currency-mask
+# ng2-money
 
-A very simple currency mask directive for Angular that allows using a number attribute with the ngModel.
+A very simple currency mask directive for Angular that allows using a number attribute with the ngModel (forked from github.com/cesarrew/ng2-currency-mask).
 
 Part of Engin3 VDI
 

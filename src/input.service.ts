@@ -22,7 +22,8 @@ export class InputService {
 
     applyMask(isNumber: boolean, rawValue: string): string {
         let { allowNegative, decimal, precision, prefix, suffix, thousands } = this.options;
-        rawValue = isNumber ? new Number(rawValue).toFixed(/*precision*/ 2) : rawValue;
+        let defaultPrecision = 3;
+        rawValue = isNumber ? new Number(rawValue).toFixed(/*precision*/ defaultPrecision) : rawValue;
         let onlyNumbers = rawValue.replace(/[^0-9.]/g, "");
 
         let moreThanOneDecimalPoint = (onlyNumbers.indexOf(decimal) != onlyNumbers.lastIndexOf(decimal));
@@ -32,8 +33,12 @@ export class InputService {
         }
 
         if (onlyNumbers.split('.').length > 1) {
-            if (onlyNumbers.split('.')[1].length > 2) {
+            if (onlyNumbers.split('.')[1].length > defaultPrecision) {
                 onlyNumbers = onlyNumbers.substring(0, onlyNumbers.length - 1);
+            } else {
+                if (this.inputManager.rawValue === '') { //first change
+                    onlyNumbers = parseFloat(onlyNumbers).toString(); //remove trailing zeros
+                }
             }
         }
 
@@ -46,9 +51,9 @@ export class InputService {
         let newRawValue = integerPart;
         let decimalPart = onlyNumbers.slice(onlyNumbers.length - precision);
 
-        if (precision > 0) {
-            newRawValue += decimal + decimalPart;
-        }
+        // if (precision > 0) {
+        //     newRawValue += decimal + decimalPart;
+        // }
 
         let isZero = parseInt(integerPart) == 0 && (parseInt(decimalPart) == 0 || decimalPart == "");
         let operator = (rawValue.indexOf("-") > -1 && allowNegative && !isZero) ? "-" : "";

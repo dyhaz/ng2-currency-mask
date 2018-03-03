@@ -1,6 +1,6 @@
 {
   "name": "ng2-money",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "forked from github.com/cesarrew/ng2-currency-mask",
   "scripts": {
     "prepublish": "ngc"
